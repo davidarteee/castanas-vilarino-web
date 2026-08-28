@@ -21,9 +21,9 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
 
-          protocol: ftps          # segur. Si dona "Timeout (control socket)", prova: ftp
+          protocol: ftp           # FTP normal: l'FTPS de Hostinger falla sovint des de CI
           port: 21
-          timeout: 60000          # l'FTPS de Hostinger pot ser lent
+          timeout: 60000
 
           local-dir: ./           # arrel del repo
 
