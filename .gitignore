@@ -1,0 +1,11 @@
+# Sistema operatiu
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Editors
+.vscode/
+.idea/
+
+# Web estàtica pura: res de node/build
+node_modules/

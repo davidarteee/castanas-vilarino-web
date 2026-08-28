@@ -1,0 +1,41 @@
+name: Desplegar a Hostinger (FTP)
+
+# S'executa cada cop que fas push a la branca main.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}   # permet llançar-lo a mà des de la pestanya Actions
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descarregar el repositori
+        uses: actions/checkout@v4
+
+      - name: Pujar fitxers per FTP a Hostinger
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          # Els 3 valors venen dels Secrets del repo. MAI s'escriuen aquí en clar.
+          server:   ${{ secrets.FTP_SERVER }}     # només la IP/host, sense ftp://
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+
+          protocol: ftps          # segur. Si dona "Timeout (control socket)", prova: ftp
+          port: 21
+          timeout: 60000          # l'FTPS de Hostinger pot ser lent
+
+          local-dir: ./           # arrel del repo
+
+          # IMPORTANT (Hostinger): l'usuari FTP del subdomini ja aterra DINS de
+          # public_html, així que la destí és l'arrel: ./  (NO ./public_html/)
+          server-dir: ./
+
+          dangerous-clean-slate: false   # no esborra fitxers desconeguts del servidor
+
+          # No cal pujar aquests fitxers al servidor:
+          exclude: |
+            **/.git*
+            **/.git*/**
+            README.md
+            .gitignore
